@@ -1,0 +1,41 @@
+name: Build
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - name: checkout
+      uses: actions/checkout@v4
+      
+    - name: install boost
+      uses: MarkusJx/install-boost@v2.4.5
+      id: install-boost
+      with:
+        boost_version: 1.73.0
+        platform_version: 2019
+        toolset: msvc
+
+    - name: install dependencies
+      run: |
+        choco install -y cmake
+        choco install -y ninja
+
+    - name: configure cmake
+      run: cmake -B build -G "Ninja" -DCMAKE_BUILD_TYPE=Release
+
+    - name: build
+      run: cmake --build build
+
+    - name: archive artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: file-manager
+        path: build/
