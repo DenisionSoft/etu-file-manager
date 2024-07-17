@@ -22,6 +22,10 @@ jobs:
         boost_version: 1.78.0
         platform_version: 2019
         toolset: msvc
+    
+    - name: Export BOOST_ROOT
+      run: echo "BOOST_ROOT=$BOOST_ROOT" >> $GITHUB_ENV
+
 
     - name: install dependencies
       run: |
